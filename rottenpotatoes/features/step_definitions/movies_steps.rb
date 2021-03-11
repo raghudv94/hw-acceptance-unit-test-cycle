@@ -23,3 +23,12 @@ Then /I should see all the movies/ do
     step %{I should see "#{movie.title}"}
   end
 end
+
+When /go to the edit page for "(.*)"/ do |movie_title|
+  visit edit_movie_path(Movie.find_by(title: movie_title))
+end
+
+Then /the (\S+) of "(.*)" should be "(.*)"/ do |field_name, movie_name, field_value|
+  # Make sure that all the movies in the app are visible in the table
+  Movie.find_by(title: movie_name)[field_name].should match(field_value)
+end
