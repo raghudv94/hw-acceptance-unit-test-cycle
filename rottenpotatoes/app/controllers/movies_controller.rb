@@ -7,7 +7,47 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+      @url = request.original_url
+    
+    if ! (@url =~ /movie/)
+      session[:ratings] = {}
+      session[:sort] = ""
+    end
+    
+    if params[:commit] == "Refresh"
+      session[:ratings] = {}
+    end
+    
+    if params[:sort].nil? && params[:ratings].nil? && (!session[:sort].nil? || !session[:ratings].nil?)
+      redirect_to movies_path(:sort => session[:sort], :ratings => session[:ratings])
+    end
+    
+    if !params[:sort].nil?
+      @sort = params[:sort]
+      session[:sort] = @sort
+    else
+      @sort = nil
+    end
+    
+    @ratings = params[:ratings] 
+    session[:ratings] = @ratings
+    
+    @all_ratings = Movie.ratings.inject(Hash.new) do |all_ratings, rating|
+      all_ratings[rating] = @ratings.nil? ? false : @ratings.has_key?(rating) 
+      all_ratings
+    end
+    
+    #@movies = Movie.all
+    if @sort.nil? && @ratings.nil?
+      @movies = Movie.all
+    elsif !@sort.nil? && !@ratings.nil?
+      @movies = Movie.where(:rating => @ratings.keys).order(@sort)
+      
+    elsif @ratings.nil?
+      @movies = Movie.order(@sort)
+    else
+      @movies = Movie.where(:rating => @ratings.keys)
+    end
   end
 
   def new
@@ -22,6 +62,15 @@ class MoviesController < ApplicationController
 
   def edit
     @movie = Movie.find params[:id]
+  end
+  
+  def directors
+    if params[:format].nil?
+      flash[:warning] = "Movie does not have a Director field"
+      redirect_to movies_path
+    else
+      @movies_director = Movie.where(director: params[:format])
+    end
   end
 
   def update
