@@ -52,7 +52,7 @@ end
 
 Then /should be on the Similar Movies page for "(.*)"/ do |movie_title|
   # Make sure that all the movies in the app are visible in the table
-  visit directors_path(Movie.find_by(title: movie_title).director)
+  visit directors_path({:director => Movie.find_by(title: movie_title).director})
 end
 
 Then /should be on the home page/ do

@@ -1,0 +1,29 @@
+
+MoviesController
+  Checking the Routes
+    /movies redirects to index method of controller
+    /shows details of a movie
+    /response code of 200 for edit
+    /response code of 200 for show
+  Looking up movies with same directors
+    /redirects to home page if director field is empty
+    /response code of 200 if a non-empty director field present
+
+MoviesHelper
+  Check Number is odd
+    returns true
+
+Movie
+  Testing creation of movies with and without directors
+    Allows creation of movies without director field
+    creation of movies with director field
+  Testing Movie Model Methods
+    should return the list of ratings for class method 'ratings'
+    should return nil with different director name
+
+1 deprecation warning total
+
+Finished in 0.05996 seconds (files took 1.59 seconds to load)
+11 examples, 0 failures
+
+Coverage report generated for Cucumber Features, RSpec to /home/ec2-user/environment/hw-acceptance-unit-test-cycle/rottenpotatoes/coverage. 54 / 65 LOC (83.08%) covered.

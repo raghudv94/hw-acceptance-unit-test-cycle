@@ -65,11 +65,12 @@ class MoviesController < ApplicationController
   end
   
   def directors
-    if params[:format].nil?
+    if params[:director].nil?
       flash[:warning] = "Movie does not have a Director field"
       redirect_to movies_path
     else
-      @movies_director = Movie.where(director: params[:format])
+      #@movies_director = Movie.where(director: params[:format])
+      @movies_director = Movie.with_director(params[:director])
     end
   end
 
